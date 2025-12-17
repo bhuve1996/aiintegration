@@ -41,3 +41,5 @@ export {
   type DashboardSection,
   type DashboardMetric,
 } from './content/dashboard.config';
+export { aboutConfig, type AboutConfig } from './content/about.config';
+export { contactConfig, type ContactConfig } from './content/contact.config';

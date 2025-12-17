@@ -16,7 +16,7 @@ export type InputVariant = 'default' | 'filled' | 'outline';
 export type InputSize = 'sm' | 'md' | 'lg';
 
 // Badge variants
-export type BadgeVariant = 'default' | 'success' | 'warning' | 'destructive' | 'info' | 'outline';
+export type BadgeVariant = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'destructive' | 'info' | 'outline';
 
 // Card variants
 export type CardVariant = 'default' | 'elevated' | 'bordered' | 'interactive';

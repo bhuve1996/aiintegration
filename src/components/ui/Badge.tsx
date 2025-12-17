@@ -11,7 +11,11 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 
 const variantStyles: Record<BadgeVariant, string> = {
   default:
+    'bg-[var(--color-background-tertiary)] text-[var(--color-text-secondary)] border-[var(--color-border)]',
+  primary:
     'bg-[var(--color-primary)]/10 text-[var(--color-primary)] border-[var(--color-primary)]/20',
+  secondary:
+    'bg-[var(--color-background-secondary)] text-[var(--color-text-muted)] border-[var(--color-border)]',
   success:
     'bg-[var(--color-success)]/10 text-[var(--color-success)] border-[var(--color-success)]/20',
   warning:

@@ -103,6 +103,21 @@ export const seoConfig = {
       description: `Create your ${appConfig.appName} account and unlock AI-powered advertising automation.`,
       keywords: ['signup', 'create account', 'get started', 'free trial'],
     },
+    forgotPassword: {
+      title: 'Reset Password',
+      description: `Reset your ${appConfig.appName} password and regain access to your account.`,
+      noIndex: true,
+    },
+    about: {
+      title: 'About Us',
+      description: `Learn about ${appConfig.appName}'s mission to democratize AI advertising for businesses of all sizes.`,
+      keywords: ['about', 'company', 'team', 'mission', 'AI advertising platform'],
+    },
+    contact: {
+      title: 'Contact Us',
+      description: `Get in touch with the ${appConfig.appName} team. We're here to help with any questions about our AI advertising platform.`,
+      keywords: ['contact', 'support', 'help', 'customer service'],
+    },
   } as Record<string, PageSeoConfig>,
 
   // Structured Data Templates
