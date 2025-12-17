@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { navigationConfig, appConfig } from '@/config';
+import { useAuth } from '@/hooks/useAuth';
 import { Plus, Folder, Image, Globe, User, LogOut, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 
@@ -15,6 +16,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 
 export function DashboardNav() {
   const pathname = usePathname();
+  const { user, logout } = useAuth();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
 
@@ -24,7 +26,7 @@ export function DashboardNav() {
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-background)]/95 backdrop-blur-xl">
       <div className="flex h-16 items-center justify-between px-4 sm:px-6">
         {/* Logo */}
-        <Link href="/dashboard" className="flex items-center gap-2">
+        <Link href="/projects" className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--color-primary)] to-purple-600">
             <span className="text-sm font-bold text-white">{appConfig.logoText.charAt(0)}</span>
           </div>
@@ -108,11 +110,18 @@ export function DashboardNav() {
                 <div className="absolute right-0 top-full mt-2 w-64 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] shadow-[var(--shadow-popup)] z-50">
                   {/* User Info */}
                   <div className="p-4 border-b border-[var(--color-border)]">
-                    <p className="font-medium text-[var(--color-text-primary)]">John Doe</p>
-                    <p className="text-sm text-[var(--color-text-muted)]">john@example.com</p>
-                    <span className="inline-block mt-2 px-2 py-0.5 text-xs font-medium rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)]">
-                      Starter Plan
-                    </span>
+                    <p className="font-medium text-[var(--color-text-primary)]">
+                      {user?.name || 'Guest User'}
+                    </p>
+                    <p className="text-sm text-[var(--color-text-muted)]">
+                      {user?.email || 'Not signed in'}
+                    </p>
+                    {user?.subscription && (
+                      <span className="inline-block mt-2 px-2 py-0.5 text-xs font-medium rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)]">
+                        {user.subscription.charAt(0).toUpperCase() + user.subscription.slice(1)}{' '}
+                        Plan
+                      </span>
+                    )}
                   </div>
 
                   {/* Menu Items */}
@@ -132,7 +141,10 @@ export function DashboardNav() {
                   {/* Logout */}
                   <div className="border-t border-[var(--color-border)] py-2">
                     <button
-                      onClick={() => setUserMenuOpen(false)}
+                      onClick={() => {
+                        setUserMenuOpen(false);
+                        logout();
+                      }}
                       className="flex items-center gap-3 w-full px-4 py-2 text-sm text-[var(--color-destructive)] hover:bg-[var(--color-destructive)]/10"
                     >
                       <LogOut className="h-4 w-4" />

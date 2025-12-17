@@ -30,6 +30,7 @@ export {
   type LanguageConfig,
 } from './i18n.config';
 export { chatConfig, type ChatConfig } from './chat.config';
+export { authConfig, validateCredentials, type AuthConfig, type DemoUser } from './auth.config';
 
 // Content configs
 export { homeConfig, type HomeConfig } from './content/home.config';
