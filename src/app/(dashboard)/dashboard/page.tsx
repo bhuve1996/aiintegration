@@ -1,11 +1,7 @@
-import { Metadata } from 'next';
-import { seoConfig } from '@/config';
+import { generatePageMetadata } from '@/lib/seo';
 import { DashboardContent } from './DashboardContent';
 
-export const metadata: Metadata = {
-  title: seoConfig.pages.dashboard.title,
-  description: seoConfig.pages.dashboard.description,
-};
+export const metadata = generatePageMetadata('dashboard');
 
 export default function DashboardPage() {
   return <DashboardContent />;

@@ -1,11 +1,7 @@
-import { Metadata } from 'next';
-import { seoConfig } from '@/config';
+import { generatePageMetadata } from '@/lib/seo';
 import { ContactContent } from './ContactContent';
 
-export const metadata: Metadata = {
-  title: seoConfig.pages.contact.title,
-  description: seoConfig.pages.contact.description,
-};
+export const metadata = generatePageMetadata('contact');
 
 export default function ContactPage() {
   return <ContactContent />;

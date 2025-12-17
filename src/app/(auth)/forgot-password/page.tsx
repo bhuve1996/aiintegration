@@ -1,11 +1,7 @@
-import { Metadata } from 'next';
-import { seoConfig } from '@/config';
+import { generatePageMetadata } from '@/lib/seo';
 import { ForgotPasswordForm } from './ForgotPasswordForm';
 
-export const metadata: Metadata = {
-  title: seoConfig.pages.forgotPassword.title,
-  description: seoConfig.pages.forgotPassword.description,
-};
+export const metadata = generatePageMetadata('forgotPassword');
 
 export default function ForgotPasswordPage() {
   return <ForgotPasswordForm />;

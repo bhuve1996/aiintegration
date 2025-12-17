@@ -1,11 +1,7 @@
-import { Metadata } from 'next';
-import { seoConfig } from '@/config';
+import { generatePageMetadata } from '@/lib/seo';
 import { PricingContent } from './PricingContent';
 
-export const metadata: Metadata = {
-  title: seoConfig.pages.pricing.title,
-  description: seoConfig.pages.pricing.description,
-};
+export const metadata = generatePageMetadata('pricing');
 
 export default function PricingPage() {
   return <PricingContent />;

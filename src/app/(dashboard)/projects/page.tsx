@@ -1,11 +1,7 @@
-import { Metadata } from 'next';
-import { seoConfig } from '@/config';
+import { generatePageMetadata } from '@/lib/seo';
 import { ProjectsContent } from './ProjectsContent';
 
-export const metadata: Metadata = {
-  title: seoConfig.pages.projects.title,
-  description: seoConfig.pages.projects.description,
-};
+export const metadata = generatePageMetadata('projects');
 
 export default function ProjectsPage() {
   return <ProjectsContent />;

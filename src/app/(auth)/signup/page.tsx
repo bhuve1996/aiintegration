@@ -1,11 +1,7 @@
-import { Metadata } from 'next';
-import { seoConfig } from '@/config';
+import { generatePageMetadata } from '@/lib/seo';
 import { SignupForm } from './SignupForm';
 
-export const metadata: Metadata = {
-  title: seoConfig.pages.signup.title,
-  description: seoConfig.pages.signup.description,
-};
+export const metadata = generatePageMetadata('signup');
 
 export default function SignupPage() {
   return <SignupForm />;

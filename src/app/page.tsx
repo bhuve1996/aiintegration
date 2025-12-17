@@ -1,8 +1,8 @@
-import { Metadata } from 'next';
 import Link from 'next/link';
 import { Header, Footer } from '@/components/layout';
 import { Button, Badge, Card } from '@/components/ui';
-import { homeConfig, seoConfig } from '@/config';
+import { homeConfig } from '@/config';
+import { generatePageMetadata } from '@/lib/seo';
 import {
   Sparkles,
   LineChart,
@@ -17,12 +17,8 @@ import {
   Check,
 } from 'lucide-react';
 
-// SEO Metadata
-export const metadata: Metadata = {
-  title: seoConfig.pages.home.title,
-  description: seoConfig.pages.home.description,
-  keywords: seoConfig.pages.home.keywords,
-};
+// SEO Metadata - type-safe from config
+export const metadata = generatePageMetadata('home');
 
 const featureIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   sparkles: Sparkles,
