@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { appConfig, seoConfig } from '@/config';
+import { ChatWidget } from '@/components/chat';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -55,8 +56,10 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon-16x16.png',
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: 'any' },
+    ],
     apple: '/apple-touch-icon.png',
   },
   manifest: '/site.webmanifest',
@@ -84,7 +87,11 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen antialiased">{children}</body>
+      <body className="min-h-screen antialiased">
+        {children}
+        {/* Floating Chat Widget */}
+        <ChatWidget />
+      </body>
     </html>
   );
 }

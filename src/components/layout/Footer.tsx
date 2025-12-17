@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { appConfig, navigationConfig } from '@/config';
+import { Logo } from '@/components/ui';
 import { Twitter, Linkedin, Facebook, Instagram } from 'lucide-react';
 
 const socialIcons: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -21,13 +22,8 @@ export function Footer() {
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5">
           {/* Brand Column */}
           <div className="col-span-2 md:col-span-4 lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--color-primary)] to-purple-600">
-                <span className="text-sm font-bold text-white">{appConfig.logoText.charAt(0)}</span>
-              </div>
-              <span className="text-xl font-bold text-[var(--color-text-primary)]">
-                {appConfig.logoText}
-              </span>
+            <Link href="/" className="inline-block mb-4">
+              <Logo size="md" />
             </Link>
             <p className="text-sm text-[var(--color-text-secondary)] mb-4 max-w-xs">
               {appConfig.description}

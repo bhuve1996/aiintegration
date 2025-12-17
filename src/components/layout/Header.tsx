@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { navigationConfig, appConfig } from '@/config';
-import { Button } from '@/components/ui';
+import { navigationConfig } from '@/config';
+import { Button, Logo } from '@/components/ui';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
@@ -18,13 +18,8 @@ export function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-background)]/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link href={header.logo.href} className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--color-primary)] to-purple-600">
-            <span className="text-sm font-bold text-white">{appConfig.logoText.charAt(0)}</span>
-          </div>
-          <span className="text-xl font-bold text-[var(--color-text-primary)]">
-            {header.logo.text}
-          </span>
+        <Link href={header.logo.href}>
+          <Logo size="md" />
         </Link>
 
         {/* Desktop Navigation */}

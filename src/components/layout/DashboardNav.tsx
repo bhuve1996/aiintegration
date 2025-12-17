@@ -3,8 +3,9 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { navigationConfig, appConfig } from '@/config';
+import { navigationConfig } from '@/config';
 import { useAuth } from '@/hooks/useAuth';
+import { Logo } from '@/components/ui';
 import { Plus, Folder, Image, Globe, User, LogOut, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 
@@ -26,13 +27,9 @@ export function DashboardNav() {
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-background)]/95 backdrop-blur-xl">
       <div className="flex h-16 items-center justify-between px-4 sm:px-6">
         {/* Logo */}
-        <Link href="/projects" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--color-primary)] to-purple-600">
-            <span className="text-sm font-bold text-white">{appConfig.logoText.charAt(0)}</span>
-          </div>
-          <span className="text-xl font-bold text-[var(--color-text-primary)] hidden sm:inline">
-            {appConfig.logoText}
-          </span>
+        <Link href="/projects">
+          <Logo size="md" showText className="hidden sm:flex" />
+          <Logo size="md" showText={false} className="sm:hidden" />
         </Link>
 
         {/* Center Navigation */}
