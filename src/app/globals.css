@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
-/* Theme CSS Variables - Derived from config */
-:root {
+/* Theme CSS Variables */
+@theme {
   /* Primary brand colors */
   --color-primary: #8366ff;
   --color-primary-hover: #7055e8;
@@ -49,10 +49,6 @@
   /* Gradients */
   --gradient-brand: linear-gradient(135deg, #8366ff 0%, #a855f7 100%);
   --gradient-hero: radial-gradient(ellipse at top, rgba(131, 102, 255, 0.15) 0%, transparent 50%);
-  --gradient-mesh:
-    radial-gradient(at 40% 20%, rgba(131, 102, 255, 0.3) 0px, transparent 50%),
-    radial-gradient(at 80% 0%, rgba(168, 85, 247, 0.2) 0px, transparent 50%),
-    radial-gradient(at 0% 50%, rgba(131, 102, 255, 0.15) 0px, transparent 50%);
 
   /* Typography */
   --font-heading: 'Satoshi', 'Plus Jakarta Sans', system-ui, sans-serif;
@@ -60,76 +56,169 @@
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
-/* Base styles */
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+/* Base layer for global styles */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-background);
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Scrollbar Styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-background-secondary);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-border-hover);
+  }
+
+  /* Selection */
+  ::selection {
+    background: var(--color-primary);
+    color: var(--color-primary-foreground);
+  }
+
+  /* Focus visible */
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /* Links */
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* Headings */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.2;
+  }
 }
 
-html {
-  scroll-behavior: smooth;
+/* Utility classes */
+@layer utilities {
+  /* Animation Classes */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease forwards;
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.6s ease forwards;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient-shift 8s ease infinite;
+  }
+
+  /* Delay utilities for staggered animations */
+  .delay-100 {
+    animation-delay: 100ms;
+  }
+  .delay-200 {
+    animation-delay: 200ms;
+  }
+  .delay-300 {
+    animation-delay: 300ms;
+  }
+  .delay-400 {
+    animation-delay: 400ms;
+  }
+  .delay-500 {
+    animation-delay: 500ms;
+  }
+
+  /* Gradient text utility */
+  .gradient-text {
+    background: var(--gradient-brand);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Glass effect */
+  .glass {
+    background: rgba(21, 21, 32, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--color-border);
+  }
+
+  /* Glow effect on hover */
+  .glow-hover {
+    transition: box-shadow 0.3s ease;
+  }
+
+  .glow-hover:hover {
+    box-shadow: var(--shadow-glow);
+  }
+
+  /* Hero background pattern */
+  .hero-pattern {
+    background-image:
+      radial-gradient(at 40% 20%, rgba(131, 102, 255, 0.3) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, rgba(168, 85, 247, 0.2) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, rgba(131, 102, 255, 0.15) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+
+  /* Grid pattern overlay */
+  .grid-pattern {
+    background-image:
+      linear-gradient(to right, rgba(131, 102, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(131, 102, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Line clamp */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 }
 
-body {
-  background: var(--color-background);
-  color: var(--color-text-primary);
-  font-family: var(--font-body);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Scrollbar Styling */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--color-background-secondary);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-border);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-border-hover);
-}
-
-/* Selection */
-::selection {
-  background: var(--color-primary);
-  color: var(--color-primary-foreground);
-}
-
-/* Focus visible */
-:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
-/* Links */
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-/* Headings */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-/* Animation Classes */
+/* Keyframes (outside of layers) */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -170,86 +259,4 @@ h6 {
   100% {
     background-position: 0% 50%;
   }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.5s ease forwards;
-}
-
-.animate-fade-in-up {
-  animation: fadeInUp 0.6s ease forwards;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-.animate-gradient {
-  background-size: 200% 200%;
-  animation: gradient-shift 8s ease infinite;
-}
-
-/* Delay utilities for staggered animations */
-.delay-100 {
-  animation-delay: 100ms;
-}
-.delay-200 {
-  animation-delay: 200ms;
-}
-.delay-300 {
-  animation-delay: 300ms;
-}
-.delay-400 {
-  animation-delay: 400ms;
-}
-.delay-500 {
-  animation-delay: 500ms;
-}
-
-/* Gradient text utility */
-.gradient-text {
-  background: var(--gradient-brand);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Glass effect */
-.glass {
-  background: rgba(21, 21, 32, 0.8);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--color-border);
-}
-
-/* Glow effect on hover */
-.glow-hover {
-  transition: box-shadow 0.3s ease;
-}
-
-.glow-hover:hover {
-  box-shadow: var(--shadow-glow);
-}
-
-/* Hero background pattern */
-.hero-pattern {
-  background-image: var(--gradient-mesh);
-  background-attachment: fixed;
-}
-
-/* Grid pattern overlay */
-.grid-pattern {
-  background-image:
-    linear-gradient(to right, rgba(131, 102, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(131, 102, 255, 0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-}
-
-/* Hide scrollbar but keep functionality */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
 }
