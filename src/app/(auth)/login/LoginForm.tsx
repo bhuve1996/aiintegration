@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Button, Input, Card } from '@/components/ui';
+import { Button, Input, Card, Checkbox, Divider, Spinner } from '@/components/ui';
 import { authConfig } from '@/config/auth.config';
 import { useAuth } from '@/hooks/useAuth';
 import { Mail, Lock, Eye, EyeOff, AlertCircle, User } from 'lucide-react';
@@ -14,6 +14,7 @@ export function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -97,8 +98,13 @@ export function LoginForm() {
             </button>
           </div>
 
-          {/* Forgot Password */}
-          <div className="text-right">
+          {/* Remember Me & Forgot Password */}
+          <div className="flex items-center justify-between">
+            <Checkbox
+              label="Remember me"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+            />
             <Link
               href="/forgot-password"
               className="text-sm text-[var(--color-primary)] hover:underline"
@@ -108,17 +114,24 @@ export function LoginForm() {
           </div>
 
           {/* Submit Button */}
-          <Button type="submit" size="lg" className="w-full" isLoading={isLoading}>
-            {loginPage.submitButton}
+          <Button type="submit" size="lg" className="w-full" disabled={isLoading}>
+            {isLoading ? (
+              <span className="flex items-center gap-2">
+                <Spinner size="sm" />
+                Signing in...
+              </span>
+            ) : (
+              loginPage.submitButton
+            )}
           </Button>
+
+          {/* Divider */}
+          <Divider label="or" />
 
           {/* Sign Up Link */}
           <p className="text-center text-sm text-[var(--color-text-secondary)]">
             {loginPage.signupText}{' '}
-            <Link
-              href="/signup"
-              className="text-[var(--color-primary)] hover:underline font-medium"
-            >
+            <Link href="/signup" className="text-[var(--color-primary)] hover:underline font-medium">
               {loginPage.signupLink}
             </Link>
           </p>

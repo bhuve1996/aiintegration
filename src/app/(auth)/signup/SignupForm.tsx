@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Button, Input, Card } from '@/components/ui';
+import { Button, Input, Card, Checkbox, Divider, Spinner } from '@/components/ui';
 import { authConfig } from '@/config/auth.config';
 import { useAuth } from '@/hooks/useAuth';
 import { Mail, Lock, Eye, EyeOff, AlertCircle, User } from 'lucide-react';
@@ -15,6 +15,7 @@ export function SignupForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,6 +32,11 @@ export function SignupForm() {
 
     if (password.length < 6) {
       setError('Password must be at least 6 characters');
+      return;
+    }
+
+    if (!agreeToTerms) {
+      setError('You must agree to the Terms of Service and Privacy Policy');
       return;
     }
 
@@ -98,6 +104,7 @@ export function SignupForm() {
               onChange={(e) => setPassword(e.target.value)}
               leftIcon={<Lock className="h-4 w-4" />}
               inputSize="lg"
+              hint="Minimum 6 characters"
             />
             <button
               type="button"
@@ -108,22 +115,37 @@ export function SignupForm() {
             </button>
           </div>
 
-          {/* Terms */}
-          <p className="text-xs text-[var(--color-text-muted)]">
-            {signupPage.termsText}{' '}
-            <Link href="/terms" className="text-[var(--color-primary)] hover:underline">
-              {signupPage.termsLink}
-            </Link>{' '}
-            and{' '}
-            <Link href="/privacy" className="text-[var(--color-primary)] hover:underline">
-              {signupPage.privacyLink}
-            </Link>
-            .
-          </p>
+          {/* Terms Checkbox */}
+          <Checkbox
+            checked={agreeToTerms}
+            onChange={(e) => setAgreeToTerms(e.target.checked)}
+            label={
+              <span className="text-sm">
+                I agree to the{' '}
+                <Link href="/terms" className="text-[var(--color-primary)] hover:underline">
+                  Terms of Service
+                </Link>{' '}
+                and{' '}
+                <Link href="/privacy" className="text-[var(--color-primary)] hover:underline">
+                  Privacy Policy
+                </Link>
+              </span>
+            }
+          />
+
+          {/* Divider */}
+          <Divider />
 
           {/* Submit Button */}
-          <Button type="submit" size="lg" className="w-full" isLoading={isLoading}>
-            {signupPage.submitButton}
+          <Button type="submit" size="lg" className="w-full" disabled={isLoading}>
+            {isLoading ? (
+              <span className="flex items-center gap-2">
+                <Spinner size="sm" />
+                Creating account...
+              </span>
+            ) : (
+              signupPage.submitButton
+            )}
           </Button>
 
           {/* Login Link */}

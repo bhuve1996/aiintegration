@@ -1,8 +1,20 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
-import { Card, CardContent, Button, Badge, EmptyState } from '@/components/ui';
-import { Plus, Folder, MoreHorizontal, TrendingUp, DollarSign, MousePointer } from 'lucide-react';
+import { PageHeader } from '@/components/layout';
+import {
+  Card,
+  CardContent,
+  Button,
+  Badge,
+  EmptyState,
+  Select,
+  Popover,
+  Divider,
+  type SelectOption,
+} from '@/components/ui';
+import { Plus, Folder, MoreHorizontal, TrendingUp, DollarSign, MousePointer, Trash2, Edit, Copy } from 'lucide-react';
 
 // Mock data - in real app this would come from API
 const mockProjects = [
@@ -63,6 +75,14 @@ const statusColors: Record<string, { bg: string; text: string }> = {
   completed: { bg: 'bg-[var(--color-info)]/10', text: 'text-[var(--color-info)]' },
 };
 
+const statusFilterOptions: SelectOption[] = [
+  { value: 'all', label: 'All Status' },
+  { value: 'active', label: 'Active' },
+  { value: 'draft', label: 'Draft' },
+  { value: 'paused', label: 'Paused' },
+  { value: 'completed', label: 'Completed' },
+];
+
 function formatCurrency(value: number): string {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -79,29 +99,37 @@ function formatNumber(value: number): string {
 }
 
 export function ProjectsContent() {
-  const projects = mockProjects;
+  const [statusFilter, setStatusFilter] = useState('all');
+  
+  const projects = statusFilter === 'all' 
+    ? mockProjects 
+    : mockProjects.filter(p => p.status === statusFilter);
   const hasProjects = projects.length > 0;
 
-  const handleMenuClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    // Handle menu click
+  const handleProjectAction = (action: string, projectId: string) => {
+    console.warn(`Action: ${action} on project: ${projectId}`);
   };
 
   return (
     <main className="min-h-[calc(100vh-4rem)] p-6">
-      {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-        <div>
-          <h1 className="text-2xl font-bold text-[var(--color-text-primary)]">Projects</h1>
-          <p className="text-sm text-[var(--color-text-muted)]">
-            Manage and monitor all your advertising projects
-          </p>
-        </div>
-        <Link href="/create">
-          <Button leftIcon={<Plus className="h-4 w-4" />}>New Project</Button>
-        </Link>
-      </div>
+      {/* Page Header using PageHeader component */}
+      <PageHeader
+        title="Projects"
+        description="Manage and monitor all your advertising projects"
+        actions={
+          <div className="flex items-center gap-3">
+            <Select
+              options={statusFilterOptions}
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="w-36"
+            />
+            <Link href="/create">
+              <Button leftIcon={<Plus className="h-4 w-4" />}>New Project</Button>
+            </Link>
+          </div>
+        }
+      />
 
       {/* Projects Grid */}
       {hasProjects ? (
@@ -128,70 +156,100 @@ export function ProjectsContent() {
           {projects.map((project) => {
             const status = statusColors[project.status];
             return (
-              <Link key={project.id} href={`/projects/${project.id}`}>
-                <Card variant="interactive" className="h-full min-h-[280px] flex flex-col">
-                  <CardContent className="flex-1 flex flex-col">
-                    {/* Header */}
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg bg-[var(--color-background-secondary)]">
-                          <Folder className="h-5 w-5 text-[var(--color-primary)]" />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold text-[var(--color-text-primary)]">
-                            {project.name}
-                          </h3>
-                          <Badge size="sm" className={`mt-1 ${status.bg} ${status.text} border-0`}>
-                            {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
-                          </Badge>
-                        </div>
+              <Card key={project.id} variant="interactive" className="h-full min-h-[280px] flex flex-col">
+                <CardContent className="flex-1 flex flex-col">
+                  {/* Header */}
+                  <div className="flex items-start justify-between mb-4">
+                    <Link href={`/projects/${project.id}`} className="flex items-center gap-3 flex-1">
+                      <div className="p-2 rounded-lg bg-[var(--color-background-secondary)]">
+                        <Folder className="h-5 w-5 text-[var(--color-primary)]" />
                       </div>
-                      <button
-                        className="p-1 rounded hover:bg-[var(--color-background-secondary)]"
-                        onClick={handleMenuClick}
-                      >
-                        <MoreHorizontal className="h-5 w-5 text-[var(--color-text-muted)]" />
-                      </button>
-                    </div>
+                      <div>
+                        <h3 className="font-semibold text-[var(--color-text-primary)] hover:text-[var(--color-primary)] transition-colors">
+                          {project.name}
+                        </h3>
+                        <Badge size="sm" className={`mt-1 ${status.bg} ${status.text} border-0`}>
+                          {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
+                        </Badge>
+                      </div>
+                    </Link>
+                    
+                    {/* Actions Popover */}
+                    <Popover
+                      align="end"
+                      trigger={
+                        <button className="p-1 rounded hover:bg-[var(--color-background-secondary)]">
+                          <MoreHorizontal className="h-5 w-5 text-[var(--color-text-muted)]" />
+                        </button>
+                      }
+                    >
+                      <div className="py-1">
+                        <button
+                          onClick={() => handleProjectAction('edit', project.id)}
+                          className="flex items-center gap-2 w-full px-3 py-2 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-background-secondary)]"
+                        >
+                          <Edit className="h-4 w-4" />
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleProjectAction('duplicate', project.id)}
+                          className="flex items-center gap-2 w-full px-3 py-2 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-background-secondary)]"
+                        >
+                          <Copy className="h-4 w-4" />
+                          Duplicate
+                        </button>
+                        <Divider className="my-1" />
+                        <button
+                          onClick={() => handleProjectAction('delete', project.id)}
+                          className="flex items-center gap-2 w-full px-3 py-2 text-sm text-[var(--color-destructive)] hover:bg-[var(--color-destructive)]/10"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                          Delete
+                        </button>
+                      </div>
+                    </Popover>
+                  </div>
 
-                    {/* Description */}
-                    <p className="text-sm text-[var(--color-text-secondary)] mb-4 line-clamp-2">
-                      {project.description}
-                    </p>
+                  {/* Description */}
+                  <p className="text-sm text-[var(--color-text-secondary)] mb-4 line-clamp-2">
+                    {project.description}
+                  </p>
 
-                    {/* Metrics */}
-                    <div className="mt-auto pt-4 border-t border-[var(--color-border)] grid grid-cols-3 gap-4">
-                      <div>
-                        <div className="flex items-center gap-1 text-[var(--color-text-muted)] mb-1">
-                          <DollarSign className="h-3 w-3" />
-                          <span className="text-xs">Spend</span>
-                        </div>
-                        <p className="font-semibold text-[var(--color-text-primary)]">
-                          {formatCurrency(project.metrics.spend)}
-                        </p>
+                  {/* Divider before metrics */}
+                  <Divider className="mt-auto" />
+
+                  {/* Metrics */}
+                  <div className="pt-4 grid grid-cols-3 gap-4">
+                    <div>
+                      <div className="flex items-center gap-1 text-[var(--color-text-muted)] mb-1">
+                        <DollarSign className="h-3 w-3" />
+                        <span className="text-xs">Spend</span>
                       </div>
-                      <div>
-                        <div className="flex items-center gap-1 text-[var(--color-text-muted)] mb-1">
-                          <MousePointer className="h-3 w-3" />
-                          <span className="text-xs">Clicks</span>
-                        </div>
-                        <p className="font-semibold text-[var(--color-text-primary)]">
-                          {formatNumber(project.metrics.clicks)}
-                        </p>
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-1 text-[var(--color-text-muted)] mb-1">
-                          <TrendingUp className="h-3 w-3" />
-                          <span className="text-xs">ROAS</span>
-                        </div>
-                        <p className="font-semibold text-[var(--color-success)]">
-                          {project.metrics.roas > 0 ? `${project.metrics.roas}x` : '-'}
-                        </p>
-                      </div>
+                      <p className="font-semibold text-[var(--color-text-primary)]">
+                        {formatCurrency(project.metrics.spend)}
+                      </p>
                     </div>
-                  </CardContent>
-                </Card>
-              </Link>
+                    <div>
+                      <div className="flex items-center gap-1 text-[var(--color-text-muted)] mb-1">
+                        <MousePointer className="h-3 w-3" />
+                        <span className="text-xs">Clicks</span>
+                      </div>
+                      <p className="font-semibold text-[var(--color-text-primary)]">
+                        {formatNumber(project.metrics.clicks)}
+                      </p>
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1 text-[var(--color-text-muted)] mb-1">
+                        <TrendingUp className="h-3 w-3" />
+                        <span className="text-xs">ROAS</span>
+                      </div>
+                      <p className="font-semibold text-[var(--color-success)]">
+                        {project.metrics.roas > 0 ? `${project.metrics.roas}x` : '-'}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             );
           })}
         </div>
